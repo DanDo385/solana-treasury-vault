@@ -1,0 +1,11 @@
+.anchor
+.env
+.env.*
+!.env.example
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+.surfpool

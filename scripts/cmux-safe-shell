@@ -1,0 +1,38 @@
+#!/bin/zsh
+set -euo pipefail
+
+project_root="${0:A:h:h}"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${HOME}/.cargo/bin:${HOME}/.local/share/solana/install/active_release/bin:${HOME}/.local/bin"
+export CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER=/usr/bin/clang
+
+cd "$project_root"
+
+case "${1:-shell}" in
+  shell)
+    print -r -- "Safe Anchor shell. Project: $project_root"
+    exec /bin/zsh -f
+    ;;
+  tests)
+    print -r -- "Safe localnet test shell. Run: anchor test"
+    exec /bin/zsh -f
+    ;;
+  verify)
+    exec anchor test
+    ;;
+  yazi)
+    exec yazi .
+    ;;
+  nvim)
+    exec nvim .
+    ;;
+  doctor)
+    for tool in cc clang yazi nvim anchor solana solana-test-validator; do
+      printf '%-24s' "$tool"
+      command -v "$tool"
+    done
+    ;;
+  *)
+    print -u2 -r -- "Usage: ${0:t} [shell|tests|verify|yazi|nvim|doctor]"
+    exit 64
+    ;;
+esac
